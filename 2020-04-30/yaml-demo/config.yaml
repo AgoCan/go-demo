@@ -1,0 +1,10 @@
+# 使用yaml做配置项
+
+db:
+  mysql:
+    name: "das-go"
+    password: "123456"
+    username: "root"
+    port: 3306
+#    host: "127.0.0.1"
+
