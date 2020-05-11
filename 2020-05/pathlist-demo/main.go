@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 )
 
 var outPath []string
@@ -16,12 +15,13 @@ func pathFunc(path string, info os.FileInfo, err error) error {
 }
 
 func main() {
-	_ = filepath.Walk("../../2020-05", pathFunc)
-	// 获取路径名，并进行判断是否是文件
-	for _, i := range outPath {
-		a, _ := os.Stat(i)
-		println(a.IsDir(), a.Mode()&os.ModeDir, a.Name())
-	}
+	//_ = filepath.Walk("../../2020-05", pathFunc)
+	//// 获取路径名，并进行判断是否是文件
+	//for _, i := range outPath {
+	//	a, _ := os.Stat(i)
+	//	println(a.IsDir(), a.Mode()&os.ModeDir, a.Name())
+	//}
+	getFileList("../../2020-05")
 
 }
 
