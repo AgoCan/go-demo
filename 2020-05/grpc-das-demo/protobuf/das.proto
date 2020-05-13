@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "das";
+
+package das;
+
+service DasService {
+	// Sends a greeting
+	rpc Das (DasRequest) returns (DasReply) {}
+  }
+
+message DasRequest {
+
+}
+
+message DasReply {
+
+}
