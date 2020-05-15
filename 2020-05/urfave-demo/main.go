@@ -14,6 +14,7 @@ func example(c *cli.Context) error {
 		name = c.Args().Get(0)
 	}
 	if c.String("lang") == "spanish" {
+		fmt.Println(c.String("conf"))
 		fmt.Println("spanish", name)
 	} else {
 		fmt.Println("Hello", name)
@@ -25,15 +26,13 @@ func main() {
 	app := &cli.App{
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:    "lang",
-				Value:   "english",
-				Aliases: []string{"l"},
-				Usage:   "language for the greeting",
+				Name:  "lang, l",
+				Value: "english",
+				Usage: "language for the greeting",
 			},
 		},
 		Action: example,
 	}
-
 	err := app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
