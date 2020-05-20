@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.21.0
 // 	protoc        v3.11.4
-// source: das.proto
+// source: protobuf/das.proto
 
 package das
 
@@ -38,7 +38,7 @@ type DasRequest struct {
 func (x *DasRequest) Reset() {
 	*x = DasRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_das_proto_msgTypes[0]
+		mi := &file_protobuf_das_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -51,7 +51,7 @@ func (x *DasRequest) String() string {
 func (*DasRequest) ProtoMessage() {}
 
 func (x *DasRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_das_proto_msgTypes[0]
+	mi := &file_protobuf_das_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -64,7 +64,7 @@ func (x *DasRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DasRequest.ProtoReflect.Descriptor instead.
 func (*DasRequest) Descriptor() ([]byte, []int) {
-	return file_das_proto_rawDescGZIP(), []int{0}
+	return file_protobuf_das_proto_rawDescGZIP(), []int{0}
 }
 
 type DasReply struct {
@@ -76,7 +76,7 @@ type DasReply struct {
 func (x *DasReply) Reset() {
 	*x = DasReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_das_proto_msgTypes[1]
+		mi := &file_protobuf_das_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -89,7 +89,7 @@ func (x *DasReply) String() string {
 func (*DasReply) ProtoMessage() {}
 
 func (x *DasReply) ProtoReflect() protoreflect.Message {
-	mi := &file_das_proto_msgTypes[1]
+	mi := &file_protobuf_das_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -102,42 +102,40 @@ func (x *DasReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DasReply.ProtoReflect.Descriptor instead.
 func (*DasReply) Descriptor() ([]byte, []int) {
-	return file_das_proto_rawDescGZIP(), []int{1}
+	return file_protobuf_das_proto_rawDescGZIP(), []int{1}
 }
 
-var File_das_proto protoreflect.FileDescriptor
+var File_protobuf_das_proto protoreflect.FileDescriptor
 
-var file_das_proto_rawDesc = []byte{
-	0x0a, 0x09, 0x64, 0x61, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x03, 0x64, 0x61, 0x73,
-	0x22, 0x0c, 0x0a, 0x0a, 0x44, 0x61, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x0a,
-	0x0a, 0x08, 0x44, 0x61, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x32, 0x35, 0x0a, 0x0a, 0x44, 0x61,
-	0x73, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x27, 0x0a, 0x03, 0x44, 0x61, 0x73, 0x12,
-	0x0f, 0x2e, 0x64, 0x61, 0x73, 0x2e, 0x44, 0x61, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x0d, 0x2e, 0x64, 0x61, 0x73, 0x2e, 0x44, 0x61, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22,
-	0x00, 0x42, 0x35, 0x0a, 0x1b, 0x69, 0x6f, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x2e, 0x65, 0x78, 0x61,
-	0x6d, 0x70, 0x6c, 0x65, 0x73, 0x2e, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x67, 0x75, 0x69, 0x64, 0x65,
-	0x42, 0x0f, 0x52, 0x6f, 0x75, 0x74, 0x65, 0x47, 0x75, 0x69, 0x64, 0x65, 0x50, 0x72, 0x6f, 0x74,
-	0x6f, 0x50, 0x01, 0x5a, 0x03, 0x64, 0x61, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+var file_protobuf_das_proto_rawDesc = []byte{
+	0x0a, 0x12, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x64, 0x61, 0x73, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x03, 0x64, 0x61, 0x73, 0x22, 0x0c, 0x0a, 0x0a, 0x44, 0x61, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x0a, 0x0a, 0x08, 0x44, 0x61, 0x73, 0x52, 0x65,
+	0x70, 0x6c, 0x79, 0x32, 0x35, 0x0a, 0x0a, 0x44, 0x61, 0x73, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x12, 0x27, 0x0a, 0x03, 0x44, 0x61, 0x73, 0x12, 0x0f, 0x2e, 0x64, 0x61, 0x73, 0x2e, 0x44,
+	0x61, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0d, 0x2e, 0x64, 0x61, 0x73, 0x2e,
+	0x44, 0x61, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x42, 0x05, 0x5a, 0x03, 0x64, 0x61,
+	0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_das_proto_rawDescOnce sync.Once
-	file_das_proto_rawDescData = file_das_proto_rawDesc
+	file_protobuf_das_proto_rawDescOnce sync.Once
+	file_protobuf_das_proto_rawDescData = file_protobuf_das_proto_rawDesc
 )
 
-func file_das_proto_rawDescGZIP() []byte {
-	file_das_proto_rawDescOnce.Do(func() {
-		file_das_proto_rawDescData = protoimpl.X.CompressGZIP(file_das_proto_rawDescData)
+func file_protobuf_das_proto_rawDescGZIP() []byte {
+	file_protobuf_das_proto_rawDescOnce.Do(func() {
+		file_protobuf_das_proto_rawDescData = protoimpl.X.CompressGZIP(file_protobuf_das_proto_rawDescData)
 	})
-	return file_das_proto_rawDescData
+	return file_protobuf_das_proto_rawDescData
 }
 
-var file_das_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_das_proto_goTypes = []interface{}{
+var file_protobuf_das_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_protobuf_das_proto_goTypes = []interface{}{
 	(*DasRequest)(nil), // 0: das.DasRequest
 	(*DasReply)(nil),   // 1: das.DasReply
 }
-var file_das_proto_depIdxs = []int32{
+var file_protobuf_das_proto_depIdxs = []int32{
 	0, // 0: das.DasService.Das:input_type -> das.DasRequest
 	1, // 1: das.DasService.Das:output_type -> das.DasReply
 	1, // [1:2] is the sub-list for method output_type
@@ -147,13 +145,13 @@ var file_das_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_das_proto_init() }
-func file_das_proto_init() {
-	if File_das_proto != nil {
+func init() { file_protobuf_das_proto_init() }
+func file_protobuf_das_proto_init() {
+	if File_protobuf_das_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_das_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_protobuf_das_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DasRequest); i {
 			case 0:
 				return &v.state
@@ -165,7 +163,7 @@ func file_das_proto_init() {
 				return nil
 			}
 		}
-		file_das_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_protobuf_das_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DasReply); i {
 			case 0:
 				return &v.state
@@ -182,20 +180,20 @@ func file_das_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_das_proto_rawDesc,
+			RawDescriptor: file_protobuf_das_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_das_proto_goTypes,
-		DependencyIndexes: file_das_proto_depIdxs,
-		MessageInfos:      file_das_proto_msgTypes,
+		GoTypes:           file_protobuf_das_proto_goTypes,
+		DependencyIndexes: file_protobuf_das_proto_depIdxs,
+		MessageInfos:      file_protobuf_das_proto_msgTypes,
 	}.Build()
-	File_das_proto = out.File
-	file_das_proto_rawDesc = nil
-	file_das_proto_goTypes = nil
-	file_das_proto_depIdxs = nil
+	File_protobuf_das_proto = out.File
+	file_protobuf_das_proto_rawDesc = nil
+	file_protobuf_das_proto_goTypes = nil
+	file_protobuf_das_proto_depIdxs = nil
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -277,5 +275,5 @@ var _DasService_serviceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "das.proto",
+	Metadata: "protobuf/das.proto",
 }
