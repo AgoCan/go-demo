@@ -6,6 +6,23 @@ import (
 	"github.com/spf13/viper"
 )
 
+type config struct {
+	Db struct {
+		Name     string
+		Password string
+	}
+}
+
+type config2 struct {
+	Log struct {
+		Path     string
+		Password string
+	}
+}
+
+var c2 *config2
+var c *config
+
 func main() {
 	// viper.SetConfigName("config") // 文件名
 	// viper.SetConfigType("yaml")  // 类型
@@ -18,5 +35,13 @@ func main() {
 	if err != nil {
 		fmt.Println("err:", err)
 	}
-	fmt.Println(viper.Get("db.name"))
+	err = viper.Unmarshal(&c)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = viper.Unmarshal(&c2)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(c, c2)
 }

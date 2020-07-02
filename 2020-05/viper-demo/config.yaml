@@ -1,2 +1,4 @@
 DB:
     Name: heihei
+Log:
+    Path: .
