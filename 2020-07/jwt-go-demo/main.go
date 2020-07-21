@@ -15,6 +15,7 @@ import (
 )
 
 const (
+	// SecretKey ss
 	SecretKey = "welcome to wangshubo's blog"
 )
 
@@ -24,11 +25,13 @@ func fatal(err error) {
 	}
 }
 
+// UserCredentials ss
 type UserCredentials struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
+// User ss
 type User struct {
 	ID       int    `json:"id"`
 	Name     string `json:"name"`
@@ -36,14 +39,17 @@ type User struct {
 	Password string `json:"password"`
 }
 
+// Response ss
 type Response struct {
 	Data string `json:"data"`
 }
 
+// Token ss
 type Token struct {
 	Token string `json:"token"`
 }
 
+// StartServer ss
 func StartServer() {
 
 	http.HandleFunc("/login", LoginHandler)
@@ -61,13 +67,15 @@ func main() {
 	StartServer()
 }
 
+// ProtectedHandler ss
 func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
 
 	response := Response{"Gained access to protected resource"}
-	JsonResponse(response, w)
+	JSONResponse(response, w)
 
 }
 
+// LoginHandler ss
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	var user UserCredentials
@@ -109,10 +117,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := Token{tokenString}
-	JsonResponse(response, w)
+	JSONResponse(response, w)
 
 }
 
+// ValidateTokenMiddleware ss
 func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 
 	token, err := request.ParseFromRequest(r, request.AuthorizationHeaderExtractor,
@@ -134,7 +143,8 @@ func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.H
 
 }
 
-func JsonResponse(response interface{}, w http.ResponseWriter) {
+// JSONResponse ss
+func JSONResponse(response interface{}, w http.ResponseWriter) {
 
 	json, err := json.Marshal(response)
 	if err != nil {
