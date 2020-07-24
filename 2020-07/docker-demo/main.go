@@ -1,17 +1,20 @@
 package main
 
 import (
+	"archive/tar"
+	"bytes"
 	"context"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"log"
 	"os"
 	"sync"
-
-	"github.com/docker/go-connections/nat"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
+	"github.com/docker/go-connections/nat"
 )
 
 // func build() {
@@ -49,6 +52,53 @@ func exec(ctx context.Context, cli *client.Client, containerID string) {
 	io.Copy(os.Stdout, r.Reader)
 }
 
+func build(ctx context.Context, cli *client.Client, dockerfilePath, imageName string) (err error) {
+	buf := new(bytes.Buffer)
+	tw := tar.NewWriter(buf)
+	defer tw.Close()
+	dockerFile := "myDockerfile"
+	dockerFileReader, err := os.Open(dockerfilePath)
+	if err != nil {
+		log.Fatal(err, " :unable to open Dockerfile")
+	}
+	readDockerFile, err := ioutil.ReadAll(dockerFileReader)
+	if err != nil {
+		log.Fatal(err, " :unable to read dockerfile")
+	}
+	tarHeader := &tar.Header{
+		Name: dockerFile,
+		Size: int64(len(readDockerFile)),
+	}
+	err = tw.WriteHeader(tarHeader)
+	if err != nil {
+		log.Fatal(err, " :unable to write tar header")
+	}
+	_, err = tw.Write(readDockerFile)
+	if err != nil {
+		log.Fatal(err, " :unable to write tar body")
+	}
+	dockerFileTarReader := bytes.NewReader(buf.Bytes())
+
+	imageBuildResponse, err := cli.ImageBuild(
+		ctx,
+		dockerFileTarReader,
+		types.ImageBuildOptions{
+			Context:    dockerFileTarReader,
+			Dockerfile: dockerFile,
+			Remove:     true,
+			Tags:       []string{imageName},
+		})
+	if err != nil {
+		log.Fatal(err, " :unable to build docker image")
+	}
+	defer imageBuildResponse.Body.Close()
+	_, err = io.Copy(os.Stdout, imageBuildResponse.Body)
+	if err != nil {
+		log.Fatal(err, " :unable to read image build response")
+	}
+	return nil
+}
+
 func main() {
 	config := container.Config{}
 	config.Image = "alpine"
@@ -84,10 +134,13 @@ func main() {
 	if err := cli.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{}); err != nil {
 		panic(err)
 	}
+
 	// commitResp, err := cli.ContainerCommit(ctx, resp.ID, types.ContainerCommitOptions{Reference: "helloworld"})
 	// if err != nil {
 	// 	panic(err)
 	// }
 	// fmt.Println(commitResp.ID)
+	err = build(ctx, cli, "./Dockerfile", "test:v-go")
 
+	fmt.Println(err)
 }
