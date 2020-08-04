@@ -21,6 +21,6 @@ RUN echo 321
 	}
 	midStr := strings.Join(strSlice, "\n")
 	fmt.Println(midStr)
-	new := strings.Replace(midStr, "123", "333", 1)
-	fmt.Println(new)
+	newStr := strings.Replace(midStr, "123", "333", 1)
+	fmt.Println(newStr)
 }
