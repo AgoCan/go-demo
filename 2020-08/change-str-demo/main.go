@@ -7,7 +7,7 @@ import (
 
 func main() {
 	dockerfile := `FROM alpine
-RUN echo 123
+  RUN echo 123
 RUN echo 321
 `
 	strSlice := strings.Split(dockerfile, "\n")
@@ -15,6 +15,7 @@ RUN echo 321
 		if str == "" {
 			continue
 		}
+		fmt.Println("---", strings.Trim(str, " "))
 		if strings.HasPrefix(str, "FROM") {
 			strSlice[i] = fmt.Sprintf("FROM %s", "alpine:3.11")
 		}

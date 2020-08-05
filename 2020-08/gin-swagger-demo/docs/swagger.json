@@ -1,25 +1,17 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server Petstore server.",
-        "title": "Swagger Example API",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "description": "这是测试文档",
+        "title": "das文档",
+        "contact": {},
+        "license": {},
         "version": "1.0"
     },
-    "host": "petstore.swagger.io",
-    "basePath": "/v2",
+    "host": "localhost",
+    "basePath": "/api/v1",
     "paths": {
         "/api/v1/tags": {
-            "get": {
+            "post": {
                 "produces": [
                     "application/json"
                 ],
@@ -27,7 +19,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Name",
+                        "description": "name",
                         "name": "name",
                         "in": "query",
                         "required": true
@@ -39,10 +31,13 @@
                         "in": "query"
                     },
                     {
-                        "type": "integer",
                         "description": "CreatedBy",
                         "name": "created_by",
-                        "in": "query"
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.User"
+                        }
                     }
                 ],
                 "responses": {
@@ -52,6 +47,16 @@
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.User": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
                 }
             }
         }

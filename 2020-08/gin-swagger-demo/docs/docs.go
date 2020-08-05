@@ -18,23 +18,15 @@ var doc = `{
     "info": {
         "description": "{{.Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "contact": {},
+        "license": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/v1/tags": {
-            "get": {
+            "post": {
                 "produces": [
                     "application/json"
                 ],
@@ -42,7 +34,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Name",
+                        "description": "name",
                         "name": "name",
                         "in": "query",
                         "required": true
@@ -54,10 +46,13 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
                         "description": "CreatedBy",
                         "name": "created_by",
-                        "in": "query"
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.User"
+                        }
                     }
                 ],
                 "responses": {
@@ -67,6 +62,16 @@ var doc = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.User": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
                 }
             }
         }
@@ -85,11 +90,11 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "petstore.swagger.io",
-	BasePath:    "/v2",
+	Host:        "localhost",
+	BasePath:    "/api/v1",
 	Schemes:     []string{},
-	Title:       "Swagger Example API",
-	Description: "This is a sample server Petstore server.",
+	Title:       "das文档",
+	Description: "这是测试文档",
 }
 
 type s struct{}
