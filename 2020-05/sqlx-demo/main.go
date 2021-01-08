@@ -89,9 +89,9 @@ type User struct {
 
 // Userinfo 用户详细信息，一对一用户表
 type Userinfo struct {
-	ID   int
-	Age  int
-	User User
+	ID     int
+	Age    int
+	UserID int `db:"user_id"`
 }
 
 // Class 班级表, 多对多
@@ -121,12 +121,12 @@ func MultiExec(e sqlx.Execer, query string) {
 }
 
 // RunWithSchema 创建表结构
-func RunWithSchema(schema Schema, db *sqlx.DB, test func()) {
+func RunWithSchema(schema Schema, db *sqlx.DB, loadDefaultFixture func()) {
 
 	// defer MultiExec(db, schema.drop)
 	MultiExec(db, schema.drop)
 	MultiExec(db, schema.create)
-	test()
+	loadDefaultFixture()
 }
 
 func loadDefaultFixture() {
@@ -153,7 +153,70 @@ func loadDefaultFixture() {
 	tx.Commit()
 }
 
-func test() {
+func getOneRecord() {
+	// 获取单条数据
+	var user User
+	err := DB.Get(&user, "select * FROM users LIMIT 1")
+	if err != nil {
+		panic(err)
+	}
+
+	rowsx, err := DB.Queryx("SELECT * FROM users ORDER BY id DESC LIMIT 1 ")
+	if err != nil {
+		panic(err)
+	}
+	rowsx.Next()
+
+	err = rowsx.StructScan(&user)
+	if err != nil {
+		panic(err)
+	}
+	rowsx.Close()
+	fmt.Println(user)
+
+}
+
+func multiRecord() {
+	var users []User
+	err := DB.Select(&users, "select * FROM users")
+	if err != nil {
+		panic(err)
+	}
+	// for _, v := range users {
+	// 	fmt.Println(v.Name)
+	// }
+
+	var users02 []User
+	db := DB.Unsafe()
+	nstmt, err := db.PrepareNamed(`SELECT * FROM users WHERE name != :name`)
+	if err != nil {
+		panic(err)
+	}
+	err = nstmt.Select(&users02, map[string]interface{}{"name": "lisi"})
+	if err != nil {
+		panic(err)
+	}
+	for _, v := range users02 {
+		fmt.Println(v.Name)
+	}
+
+}
+
+func oneToOne() {
+	// 一对一查询
+	userInfos := []struct {
+		User
+		Userinfo
+	}{}
+	// 帮你自动查询两张表中所有相同的字段，然后进行等值连接。
+	err := DB.Select(
+		&userInfos,
+		`SELECT users.*, userinfos.* FROM
+		 users natural join userinfos`)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(userInfos)
 
 }
 
@@ -161,6 +224,6 @@ func main() {
 	Init("root:root1234@tcp(localhost:3306)/example?parseTime=true")
 	defer DB.Close()
 
-	RunWithSchema(defaultSchema, DB, test)
-	loadDefaultFixture()
+	RunWithSchema(defaultSchema, DB, loadDefaultFixture)
+	oneToOne()
 }
