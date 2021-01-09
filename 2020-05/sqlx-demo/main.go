@@ -4,6 +4,7 @@ package main
 import (
 	// mysql 驱动
 
+	"database/sql"
 	"fmt"
 	"strings"
 	"time"
@@ -260,7 +261,7 @@ func oneToOne() {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	for _, v1 := range users {
 		for _, v2 := range userinfos {
 			if v2.UserID == v1.ID {
@@ -275,10 +276,36 @@ func oneToOne() {
 	fmt.Println(userInfos)
 }
 
+func useNullString() {
+	// 如果注释掉下面的代码，使用最上面的结构体，那么就会报错 panic: sql: Scan error on column index 1, name "name": converting NULL to string is unsupported
+	type User struct {
+		ID      int
+		Name    sql.NullString
+		AddedAt time.Time `db:"added_at"`
+	}
+	var user User
+	var err error
+	err = DB.Get(&user, "select * FROM users LIMIT 1")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(user)
+
+	// UPDATE dockerfile SET dockerfile = ? where level_id = ?
+	_, err = DB.Exec("UPDATE users SET name = ? where id = 1", sql.NullString{String: "", Valid: false})
+	fmt.Println(err)
+	err = DB.Get(&user, "select * FROM users LIMIT 1")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(user)
+}
+
 func main() {
 	Init("root:root1234@tcp(localhost:3306)/example?parseTime=true")
 	defer DB.Close()
 
 	RunWithSchema(defaultSchema, DB, loadDefaultFixture)
-	oneToOne()
+	useNullString()
 }
