@@ -203,21 +203,76 @@ func multiRecord() {
 }
 
 func oneToOne() {
-	// 一对一查询
+	// 一对一查询,也可以用与一对多查询
 	userInfos := []struct {
 		User
 		Userinfo
 	}{}
+	var err error
 	// 帮你自动查询两张表中所有相同的字段，然后进行等值连接。
-	err := DB.Select(
-		&userInfos,
-		`SELECT users.*, userinfos.* FROM
-		 users natural join userinfos`)
+	// err = DB.Select(
+	// 	&userInfos,
+	// 	`SELECT users.*, userinfos.* FROM
+	// 	 users natural join userinfos`)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// err = DB.Select(
+	// 	&userInfos,
+	// 	`SELECT * FROM
+	// 	users, userinfos
+	// 	WHERE users.id = userinfos.user_id;`)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// err = DB.Select(
+	// 	&userInfos,
+	// 	`SELECT * FROM
+	// 	users LEFT JOIN userinfos USING  (id);`)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// err = DB.Select(
+	// 	&userInfos,
+	// 	`SELECT * FROM
+	// 	users INNER JOIN userinfos ON users.id = userinfos.user_id;`)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// 利用单表查询，并做组合
+	var (
+		users     []User
+		userinfos []Userinfo
+	)
+	err = DB.Select(
+		&users,
+		`SELECT * FROM users`)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(userInfos)
+	err = DB.Select(
+		&userinfos,
+		`SELECT * FROM userinfos`)
+	if err != nil {
+		panic(err)
+	}
+	
+	for _, v1 := range users {
+		for _, v2 := range userinfos {
+			if v2.UserID == v1.ID {
+				userInfos = append(userInfos, struct {
+					User
+					Userinfo
+				}{User: v1, Userinfo: v2})
+			}
+		}
+	}
 
+	fmt.Println(userInfos)
 }
 
 func main() {
