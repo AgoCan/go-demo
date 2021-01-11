@@ -84,7 +84,7 @@ var defaultSchema = Schema{
 // User 用户表
 type User struct {
 	ID      int
-	Name    string
+	Name    string    `db:"name"`
 	AddedAt time.Time `db:"added_at"`
 }
 
@@ -98,7 +98,8 @@ type Userinfo struct {
 // Class 班级表, 多对多
 type Class struct {
 	ID    int
-	Users []*User
+	Users User `db:"users"`
+	Name  string
 }
 
 // Books 书本表, 用户一对多书本
@@ -146,6 +147,7 @@ func loadDefaultFixture() {
 
 	tx.MustExec(tx.Rebind("insert into classes_users (id, user_id, classes_id) values(?,?,?);"), "1", "1", "1")
 	tx.MustExec(tx.Rebind("insert into classes_users (id, user_id, classes_id) values(?,?,?);"), "2", "2", "1")
+	tx.MustExec(tx.Rebind("insert into classes_users (id, user_id, classes_id) values(?,?,?);"), "3", "2", "2")
 
 	tx.MustExec(tx.Rebind("insert into books (id, name, user_id) values(?,?, ?);"), "1", "三体", "1")
 	tx.MustExec(tx.Rebind("insert into books (id, name, user_id) values(?,?, ?);"), "2", "三年模拟", "1")
@@ -276,6 +278,60 @@ func oneToOne() {
 	fmt.Println(userInfos)
 }
 
+func manyToMany() {
+	// 多对多，三表查询
+	// var classes []Class // 结构体是什么类型，读出来就是什么数据
+	// var err error
+	// err = DB.Select(
+	// 	&classes,
+	// 	`SELECT classes.id id, users.id "users.id", users.name  "users.name", classes.name  FROM users
+	// 	INNER JOIN classes
+	// 	INNER JOIN classes_users
+	// 	ON classes.id = classes_users.classes_id and users.id = classes_users.user_id ;`)
+	// //
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	type Class02 struct {
+		ID    int
+		Users []*User
+		Name  string
+	}
+	var c []Class02
+	var classes02 = make(map[int][]*User)
+	rows, _ := DB.Queryx(`SELECT classes.id id, users.id "users.id", users.name  "users.name", classes.name  FROM users 
+	INNER JOIN classes 
+	INNER JOIN classes_users 
+	ON classes.id = classes_users.classes_id and users.id = classes_users.user_id ;`)
+	for rows.Next() {
+		var (
+			ClassID   int
+			UserID    int
+			UserName  string
+			ClassName string
+		)
+		rows.Scan(&ClassID, &UserID, &UserName, &ClassName)
+		if tags, ok := classes02[ClassID]; ok {
+			classes02[ClassID] = append(tags, &User{ID: UserID, Name: UserName})
+		} else {
+			classes02[ClassID] = []*User{&User{ID: UserID, Name: UserName}}
+		}
+
+	}
+	for itemID, tags := range classes02 {
+		c = append(c, Class02{
+			ID:    itemID,
+			Users: tags,
+		})
+	}
+	for _, v := range c {
+		for _, v2 := range v.Users {
+			fmt.Println(v2)
+		}
+	}
+}
+
 func useNullString() {
 	// 如果注释掉下面的代码，使用最上面的结构体，那么就会报错 panic: sql: Scan error on column index 1, name "name": converting NULL to string is unsupported
 	type User struct {
@@ -307,5 +363,5 @@ func main() {
 	defer DB.Close()
 
 	RunWithSchema(defaultSchema, DB, loadDefaultFixture)
-	useNullString()
+	manyToMany()
 }
