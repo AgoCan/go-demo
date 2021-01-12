@@ -298,8 +298,9 @@ func manyToMany() {
 		Users []*User
 		Name  string
 	}
-	var c []Class02
-	var classes02 = make(map[int][]*User)
+	var classList []*Class02
+
+	var classesMap = make(map[int][]*User)
 	rows, _ := DB.Queryx(`SELECT classes.id id, users.id "users.id", users.name  "users.name", classes.name  FROM users 
 	INNER JOIN classes 
 	INNER JOIN classes_users 
@@ -312,23 +313,25 @@ func manyToMany() {
 			ClassName string
 		)
 		rows.Scan(&ClassID, &UserID, &UserName, &ClassName)
-		if tags, ok := classes02[ClassID]; ok {
-			classes02[ClassID] = append(tags, &User{ID: UserID, Name: UserName})
+		if users, ok := classesMap[ClassID]; ok {
+			classesMap[ClassID] = append(users, &User{ID: UserID, Name: UserName})
+			
+
 		} else {
-			classes02[ClassID] = []*User{&User{ID: UserID, Name: UserName}}
+			classesMap[ClassID] = []*User{&User{ID: UserID, Name: UserName}}
+			classList = append(classList, &Class02{ID: ClassID, Name: ClassName})
 		}
 
 	}
-	for itemID, tags := range classes02 {
-		c = append(c, Class02{
-			ID:    itemID,
-			Users: tags,
-		})
-	}
-	for _, v := range c {
-		for _, v2 := range v.Users {
-			fmt.Println(v2)
+
+	for _, c := range classList {
+		if users, ok := classesMap[c.ID]; ok {
+			c.Users = users
 		}
+	}
+
+	for _, c := range classList {
+		fmt.Println(c)
 	}
 }
 
