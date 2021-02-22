@@ -17,9 +17,10 @@ var (
 	passwd   = flag.String("p", "****", "email password.")
 	smtpHost = flag.String("h", "smtp.qiye.aliyun.com", "email smtp host.")
 	smtpPort = flag.String("port", "25", "email smtp host.")
-	to       = flag.String("t", "123456@qq.com", "mail to address.")
+	to       = flag.String("t", "123456@qq.com,88888@qq.com", "mail to address. use ',' split")
 	subject  = flag.String("s", "subject", "mail subject.")
 	bodyPath = flag.String("f", "./1.csv", "mail body.")
+	message  = flag.String("m", "null", "mail message")
 )
 
 // Mail define email interface, and implemented auth and send method
@@ -59,6 +60,7 @@ type Message struct {
 func buildBody() (bodyString string) {
 	var temp string
 	bodyArray := make([]string, 6)
+	bodyArray = append(bodyArray, *message)
 	bodyArray = append(bodyArray, "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head>")
 	bodyArray = append(bodyArray, "<table bgcolor='' style=' font-size: 14px;'border='1' cellspacing='0' cellpadding='0' bordercolor='#000000' width='95%' align='center' >")
 	body, _ := ioutil.ReadFile(*bodyPath)
@@ -78,10 +80,11 @@ func buildBody() (bodyString string) {
 	return bodyString
 }
 func main() {
+	flag.Parse()
 	var mail Mail
 	mail = &SendMail{user: *user, password: *passwd, host: *smtpHost, port: *smtpPort}
 	message := Message{from: *user,
-		to:          []string{*to},
+		to:          strings.Split(*to, ","),
 		cc:          []string{},
 		bcc:         []string{},
 		subject:     *subject,
