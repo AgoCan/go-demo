@@ -315,7 +315,6 @@ func manyToMany() {
 		rows.Scan(&ClassID, &UserID, &UserName, &ClassName)
 		if users, ok := classesMap[ClassID]; ok {
 			classesMap[ClassID] = append(users, &User{ID: UserID, Name: UserName})
-			
 
 		} else {
 			classesMap[ClassID] = []*User{&User{ID: UserID, Name: UserName}}
@@ -361,10 +360,36 @@ func useNullString() {
 	fmt.Println(user)
 }
 
+func useIn() {
+	var users []*User
+	sqlStr := `select 
+		*
+	from 
+		users
+	where 
+		id in (?); `
+	// 其中 query 是字符串。根据数组的长度拆开了问好
+	query, args, err := sqlx.In(sqlStr, []int{1, 2})
+	fmt.Println(query, args)
+	if err != nil {
+		panic(err)
+	}
+	rows, err := DB.Queryx(query, args...)
+	for rows.Next() {
+		var user User
+		if rows.StructScan(&user) != nil {
+			break
+		}
+		users = append(users, &user)
+	}
+	fmt.Println(users)
+
+}
+
 func main() {
 	Init("root:root1234@tcp(localhost:3306)/example?parseTime=true")
 	defer DB.Close()
 
 	RunWithSchema(defaultSchema, DB, loadDefaultFixture)
-	manyToMany()
+	useIn()
 }
