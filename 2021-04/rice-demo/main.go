@@ -9,8 +9,7 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/GeertJohan/go.rice"
-	"github.com/davecgh/go-spew/spew"
+	rice "github.com/GeertJohan/go.rice"
 )
 
 func main() {
@@ -35,11 +34,11 @@ func main() {
 	}
 	log.Printf("Read some file contents as byteSlice:\n%s\n", hex.Dump(contentBytes))
 
-	file, err := box.Open("file.txt")
-	if err != nil {
-		log.Fatalf("could not open file: %s\n", err)
-	}
-	spew.Dump(file)
+	// file, err := box.Open("file.txt")
+	// if err != nil {
+	// 	log.Fatalf("could not open file: %s\n", err)
+	// }
+	// spew.Dump(file)
 
 	// find/create a rice.Box
 	templateBox, err := rice.FindBox("example-templates")
