@@ -22,7 +22,6 @@ func Init(env string) {
 	config.AddConfigPath("config/")
 	err = config.ReadInConfig()
 	if err != nil{fmt.Println(err)}
-
 }
 
 func relativePath(basedir string, path *string) {

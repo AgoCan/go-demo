@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	. "github.com/go-git/go-git/v5/_examples"
+	"github.com/go-git/go-git/v5/plumbing/transport/http"
 )
 
 // Basic example of how to clone a repository using clone options.
@@ -19,7 +20,8 @@ func main() {
 
 	r, err := git.PlainClone(directory, false, &git.CloneOptions{
 		URL:               url,
-		RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
+		RecurseSubmodules: git.NoRecurseSubmodules,
+		Auth:              &http.BasicAuth{Username:"user", Password:"password"},
 	})
 
 	CheckIfError(err)
